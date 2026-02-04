@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pencarian Berita Otomatis</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    * { box-sizing: border-box; }
+
+    :root {
+      --bg: linear-gradient(135deg, #eef2f7, #dbe4f0);
+      --card-bg: #ffffff;
+      --text-main: #1f2937;
+      --text-muted: #6b7280;
+      --border: #d1d5db;
+      --primary: #2563eb;
+    }
+
+    body.dark {
+      --bg: linear-gradient(135deg, #0f172a, #020617);
+      --card-bg: #020617;
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --border: #1f2937;
+      --primary: #3b82f6;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: background 0.3s ease;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+      gap: 32px;
+      width: 100%;
+      max-width: 1000px;
+      padding: 24px;
+      position: relative;
+    }
+
+    .theme-toggle {
+      position: absolute;
+      top: -56px;
+      right: 0;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--text-main);
+    }
+
+    .card {
+      background: var(--card-bg);
+      padding: 32px;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    h1 { color: var(--text-main); font-size: 22px; margin: 0 0 8px; }
+    p { color: var(--text-muted); margin: 0 0 24px; font-size: 14px; }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-main);
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-size: 15px;
+      background: transparent;
+      color: var(--text-main);
+      margin-bottom: 20px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      border: none;
+      background: var(--primary);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+
+    .hint {
+      margin-top: 20px;
+      font-size: 12px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark Mode</button>
+
+  <div class="card">
+    <h1>Berita Terbaru</h1>
+    <p>Cari dan buka berita paling baru dari Google News secara otomatis</p>
+
+    <div class="form-group">
+      <label for="keyword">Kata kunci</label>
+      <input type="text" id="keyword" placeholder="Contoh: Berita terbaru hari ini" />
+    </div>
+
+    <button onclick="searchNews()">🔍 Buka Berita Terbaru</button>
+
+    <div class="hint">
+      Google News akan diurutkan berdasarkan tanggal terkini
+    </div>
+  </div>
+
+  <div class="card">
+    <h1>Berita Berdasarkan Tanggal</h1>
+    <p>Temukan berita Google News dalam rentang waktu yang kamu tentukan</p>
+
+    <div class="form-group">
+      <label for="keywordRange">Kata kunci</label>
+      <input type="text" id="keywordRange" placeholder="Contoh: Berita terbaru hari ini" />
+    </div>
+
+    <div class="form-group">
+      <label for="startDate">Tanggal mulai</label>
+      <input type="date" id="startDate" />
+    </div>
+
+    <div class="form-group">
+      <label for="endDate">Tanggal akhir</label>
+      <input type="date" id="endDate" />
+    </div>
+
+    <button onclick="searchNewsByDate()">📅 Buka Berita Berdasarkan Rentang Tanggal</button>
+
+    <div class="hint">
+      Google News akan diurutkan berdasarkan tanggal terkini dalam rentang tanggal tertentu
+    </div>
+  </div>
+
+  </div>
+
+  <script>
+    const toggleBtn = document.querySelector('.theme-toggle');
+
+    // ENTER key submit support
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter') return;
+
+      const active = document.activeElement;
+
+      // Card 1: terbaru
+      if (active && active.id === 'keyword') {
+        searchNews();
+      }
+
+      // Card 2: rentang tanggal
+      if (['keywordRange', 'startDate', 'endDate'].includes(active?.id)) {
+        searchNewsByDate();
+      }
+    });
+
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+      const dark = document.body.classList.contains('dark');
+      toggleBtn.textContent = dark ? '☀️ Light Mode' : '🌙 Dark Mode';
+      localStorage.setItem('theme', dark ? 'dark' : 'light');
+    }
+
+    // load saved theme
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark');
+      toggleBtn.textContent = '☀️ Light Mode';
+    }
+
+    function searchNews() {
+      const keyword = document.getElementById('keyword').value.trim();
+      if (!keyword) return alert('Masukkan kata kunci terlebih dahulu');
+      const query = encodeURIComponent(keyword);
+      window.open(`https://www.google.com/search?q=${query}&tbm=nws&tbs=sbd:1`, '_blank');
+    }
+
+    function searchNewsByDate() {
+      const keyword = document.getElementById('keywordRange').value.trim();
+      const start = document.getElementById('startDate').value;
+      const end = document.getElementById('endDate').value;
+
+      if (!keyword || !start || !end) return alert('Lengkapi semua field');
+      if (start > end) return alert('Tanggal mulai tidak boleh lebih besar');
+
+      const s = new Date(start);
+      const e = new Date(end);
+      const sf = `${s.getMonth()+1}/${s.getDate()}/${s.getFullYear()}`;
+      const ef = `${e.getMonth()+1}/${e.getDate()}/${e.getFullYear()}`;
+
+      const query = encodeURIComponent(keyword);
+      const tbs = `cdr:1,cd_min:${sf},cd_max:${ef},sbd:1`;
+      window.open(`https://www.google.com/search?q=${query}&tbm=nws&tbs=${tbs}`, '_blank');
+    }
+  </script>
+</body>
+</html>
