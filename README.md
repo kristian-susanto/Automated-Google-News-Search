@@ -13,10 +13,11 @@ This project allows users to search news by keyword or within a specific date ra
 - 🚀 No backend required — pure HTML, CSS, and JavaScript
 
 ## 📁 Project Structure
-
+```bash
 /automated-google-news-search
 ├── index.html
 └── README.md
+```
 
 This project is fully contained in a single HTML file.
 
@@ -28,8 +29,9 @@ This project is fully contained in a single HTML file.
 - The app opens Google News results sorted by **most recent**
 
 Google search parameter used:
-
+```text
 tbm=nws&tbs=sbd:1
+```
 
 ### 2. Date Range News Search
 - Enter a keyword
@@ -38,8 +40,9 @@ tbm=nws&tbs=sbd:1
 - Google News opens filtered by the selected dates
 
 Google search parameter used:
-
+```text
 tbs=cdr:1,cd_min:MM/DD/YYYY,cd_max:MM/DD/YYYY,sbd:1
+```
 
 ## ⌨️ Keyboard Support
 
