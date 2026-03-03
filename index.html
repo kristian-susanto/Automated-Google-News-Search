@@ -13,12 +13,10 @@
       rel="icon"
       href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📰</text></svg>"
     />
-
     <style>
       * {
         box-sizing: border-box;
       }
-
       :root {
         --bg: linear-gradient(135deg, #eef2f7, #dbe4f0);
         --card-bg: #ffffff;
@@ -26,17 +24,16 @@
         --text-muted: #6b7280;
         --border: #d1d5db;
         --primary: #2563eb;
+        --danger: #ef4444;
       }
-
       body.dark {
         --bg: linear-gradient(135deg, #0f172a, #020617);
-        --card-bg: #020617;
+        --card-bg: #1e293b;
         --text-main: #e5e7eb;
         --text-muted: #9ca3af;
-        --border: #1f2937;
+        --border: #334155;
         --primary: #3b82f6;
       }
-
       body {
         margin: 0;
         font-family: "Inter", sans-serif;
@@ -48,61 +45,45 @@
         transition: background 0.3s ease;
         padding: 20px;
       }
-
-      .container {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 24px;
+      .card {
+        background: var(--card-bg);
+        padding: 32px;
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         width: 100%;
-        max-width: 1000px;
+        max-width: 450px;
         position: relative;
-        margin-top: 40px;
       }
-
       .theme-toggle {
         position: absolute;
         top: -50px;
-        right: 10px;
+        right: 0;
         padding: 8px 16px;
         border-radius: 999px;
         background: var(--card-bg);
         border: 1px solid var(--border);
         cursor: pointer;
-        font-size: 13px;
+        font-size: 12px;
         color: var(--text-main);
-        z-index: 10;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        font-weight: 500;
       }
-
-      .card {
-        background: var(--card-bg);
-        padding: 24px;
-        border-radius: 16px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-        transition:
-          background 0.3s ease,
-          color 0.3s ease;
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-      }
-
       h1 {
         color: var(--text-main);
-        font-size: 20px;
+        font-size: 22px;
         margin: 0 0 8px;
+        text-align: center;
       }
       p {
         color: var(--text-muted);
-        margin: 0 0 20px;
+        margin: 0 0 24px;
         font-size: 14px;
-        line-height: 1.5;
+        text-align: center;
       }
       label {
         display: block;
         margin-bottom: 6px;
         font-size: 13px;
-        font-weight: 500;
+        font-weight: 600;
         color: var(--text-main);
       }
 
@@ -111,131 +92,147 @@
         padding: 12px;
         border-radius: 8px;
         border: 1px solid var(--border);
-        font-size: 15px;
         background: transparent;
         color: var(--text-main);
         margin-bottom: 16px;
         outline: none;
+        font-family: inherit;
       }
-
       input:focus {
         border-color: var(--primary);
+        box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+      }
+
+      details {
+        margin-bottom: 24px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      summary {
+        padding: 12px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--primary);
+        background: rgba(37, 99, 235, 0.05);
+        list-style: none;
+      }
+      summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .date-grid {
+        padding: 12px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .date-grid input {
+        margin-bottom: 0;
+      }
+
+      .button-group {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 12px;
       }
 
       button {
-        width: 100%;
         padding: 14px;
         border-radius: 10px;
         border: none;
-        background: var(--primary);
-        color: white;
         font-weight: 600;
         cursor: pointer;
-        margin-top: auto;
-        transition: opacity 0.2s;
+        transition: all 0.2s;
+        font-family: inherit;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      .btn-search {
+        background: var(--primary);
+        color: white;
+      }
+      .btn-search:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+      }
+
+      .btn-reset {
+        background: transparent;
+        color: var(--text-muted);
+        border: 1px solid var(--border);
+      }
+      .btn-reset:hover {
+        background: #fee2e2;
+        color: var(--danger);
+        border-color: var(--danger);
       }
 
       button:active {
-        opacity: 0.8;
+        transform: translateY(0);
       }
 
+      /* Bagian yang diubah menjadi teks normal */
       .hint {
         margin-top: 16px;
-        font-size: 12px;
+        font-size: 13px;
         color: var(--text-muted);
         text-align: center;
-        line-height: 1.4;
-      }
-
-      /* Dark mode support for SweetAlert Toast */
-      .dark .swal2-toast {
-        background-color: #1f2937 !important;
-        color: #e5e7eb !important;
-      }
-
-      @media (max-width: 600px) {
-        body {
-          align-items: flex-start;
-          padding: 15px;
-        }
-        .container {
-          grid-template-columns: 1fr;
-          margin-top: 60px;
-          gap: 16px;
-        }
-        .theme-toggle {
-          right: 0;
-        }
+        text-transform: none; /* Menghapus Uppercase */
+        letter-spacing: normal; /* Menghapus jarak huruf lebar */
       }
     </style>
   </head>
   <body>
-    <div class="container">
+    <div class="card">
       <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark Mode</button>
+      <h1>News Search</h1>
+      <p>Automatically find the latest news based on your keywords.</p>
 
-      <div class="card">
-        <h1>Latest News</h1>
-        <p>
-          Search and open the most recent news from Google News automatically.
-        </p>
-        <div class="form-group">
-          <label for="keyword">Keyword</label>
-          <input
-            type="text"
-            id="keyword"
-            placeholder="Example: Technology news"
-          />
+      <label for="keyword">Keyword</label>
+      <input
+        type="text"
+        id="keyword"
+        placeholder="e.g., AI Technology"
+        autofocus
+      />
+
+      <details id="dateFilter">
+        <summary>📅 Date Range Filter (Optional)</summary>
+        <div class="date-grid">
+          <div>
+            <label>From</label>
+            <input type="date" id="startDate" />
+          </div>
+          <div>
+            <label>To</label>
+            <input type="date" id="endDate" />
+          </div>
         </div>
-        <button onclick="searchNews()">🔍 Open Latest News</button>
-        <div class="hint">Results will be sorted by publication time.</div>
+      </details>
+
+      <div class="button-group">
+        <button class="btn-search" onclick="executeSearch()">
+          🔍 Open News
+        </button>
+        <button class="btn-reset" onclick="resetForm()">🔄 Reset</button>
       </div>
 
-      <div class="card">
-        <h1>Date Range</h1>
-        <p>Find news within a specific time range of your choice.</p>
-        <div class="form-group">
-          <label for="keywordRange">Keyword</label>
-          <input
-            type="text"
-            id="keywordRange"
-            placeholder="Example: Global Economy"
-          />
-        </div>
-        <div class="form-group">
-          <label for="startDate">Start date</label>
-          <input type="date" id="startDate" />
-        </div>
-        <div class="form-group">
-          <label for="endDate">End date</label>
-          <input type="date" id="endDate" />
-        </div>
-        <button onclick="searchNewsByDate()">📅 Search by Date</button>
-        <div class="hint">Sorted from the newest within the range.</div>
-      </div>
+      <div class="hint">Results sorted by newest first</div>
     </div>
 
     <script>
       const toggleBtn = document.querySelector(".theme-toggle");
-
-      // Konfigurasi Toast SweetAlert
       const Toast = Swal.mixin({
         toast: true,
         position: "top",
         showConfirmButton: false,
-        timer: 3000,
+        timer: 5000,
         timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.onmouseenter = Swal.stopTimer;
-          toast.onmouseleave = Swal.resumeTimer;
-        },
-      });
-
-      document.addEventListener("keydown", (e) => {
-        if (e.key !== "Enter") return;
-        const active = document.activeElement;
-        if (active?.id === "keyword") searchNews();
-        if (["keywordRange", "startDate", "endDate"].includes(active?.id))
-          searchNewsByDate();
       });
 
       function toggleTheme() {
@@ -250,50 +247,57 @@
         toggleBtn.textContent = "☀️ Light Mode";
       }
 
-      function searchNews() {
-        const keyword = document.getElementById("keyword").value.trim();
-        if (!keyword) {
-          return Toast.fire({
-            icon: "warning",
-            title: "Please enter a keyword",
-          });
-        }
-        window.open(
-          `https://www.google.com/search?q=${encodeURIComponent(keyword)}&tbm=nws&tbs=sbd:1`,
-          "_blank",
-        );
+      function resetForm() {
+        document.getElementById("keyword").value = "";
+        document.getElementById("startDate").value = "";
+        document.getElementById("endDate").value = "";
+        document.getElementById("dateFilter").removeAttribute("open");
+        document.getElementById("keyword").focus();
+
+        Toast.fire({
+          icon: "info",
+          title: "Form cleared",
+        });
       }
 
-      function searchNewsByDate() {
-        const keyword = document.getElementById("keywordRange").value.trim();
+      function executeSearch() {
+        const keyword = document.getElementById("keyword").value.trim();
         const start = document.getElementById("startDate").value;
         const end = document.getElementById("endDate").value;
 
-        if (!keyword || !start || !end) {
+        if (!keyword) {
           return Toast.fire({
             icon: "warning",
-            title: "Please fill in all fields",
+            title: "Please enter a keyword!",
           });
         }
 
-        if (start > end) {
-          return Toast.fire({
-            icon: "error",
-            title: "Invalid date range",
-          });
+        let tbs = "sbd:1";
+
+        if (start || end) {
+          if (start && end && start > end) {
+            return Toast.fire({ icon: "error", title: "Invalid date range!" });
+          }
+
+          const s = start ? new Date(start) : new Date("2000-01-01");
+          const e = end ? new Date(end) : new Date();
+
+          const sf = `${s.getMonth() + 1}/${s.getDate()}/${s.getFullYear()}`;
+          const ef = `${e.getMonth() + 1}/${e.getDate()}/${e.getFullYear()}`;
+
+          tbs = `cdr:1,cd_min:${sf},cd_max:${ef},sbd:1`;
         }
 
-        const s = new Date(start);
-        const e = new Date(end);
-        const sf = `${s.getMonth() + 1}/${s.getDate()}/${s.getFullYear()}`;
-        const ef = `${e.getMonth() + 1}/${e.getDate()}/${e.getFullYear()}`;
-
-        const tbs = `cdr:1,cd_min:${sf},cd_max:${ef},sbd:1`;
         window.open(
           `https://www.google.com/search?q=${encodeURIComponent(keyword)}&tbm=nws&tbs=${tbs}`,
           "_blank",
         );
       }
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") executeSearch();
+        if (e.key === "Escape") resetForm();
+      });
     </script>
   </body>
 </html>
